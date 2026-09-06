@@ -16,8 +16,6 @@ function strike(nx, ny, level, instrument, when) {
   var tx = Math.max(0, Math.min(1, nx));
 
   if (ac) {
-    /* a whole loop cycle is scheduled in one burst, so the polyphony cap
-       must only govern notes sounding right now — not notes queued ahead */
     var at = (when === undefined)
       ? ac.currentTime + 0.02
       : Math.max(when, ac.currentTime + 0.005);
@@ -116,8 +114,8 @@ function drawMark(m, now, ink) {
 
   } else if (m.kind === 'bloom') {
     var grad = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, Math.max(r, 1));
-    grad.addColorStop(0, 'rgba(' + ink + ',' + (fade * 0.30).toFixed(4) + ')';
-    grad.addColorStop(0.45, 'rgba(' + ink + ',' + (fade * 0.10).toFixed(4) + ')';
+    grad.addColorStop(0, 'rgba(' + ink + ',' + (fade * 0.30).toFixed(4) + ')');
+    grad.addColorStop(0.45, 'rgba(' + ink + ',' + (fade * 0.10).toFixed(4) + ')');
     grad.addColorStop(1, 'rgba(' + ink + ',0)');
     ctx.fillStyle = grad;
     ctx.beginPath(); ctx.arc(m.x, m.y, r, 0, 6.2832); ctx.fill();
@@ -157,7 +155,7 @@ function drawMark(m, now, ink) {
     var vh = PLAY_H * (0.16 + 0.20 * (1 - m.nz)) * (0.5 + 0.5 * e);
     var vg = ctx.createLinearGradient(0, m.rowY - vh / 2, 0, m.rowY + vh / 2);
     vg.addColorStop(0, 'rgba(' + ink + ',0)');
-    vg.addColorStop(0.5, 'rgba(' + ink + ',' + (fade * 0.09).toFixed(4) + ')';
+    vg.addColorStop(0.5, 'rgba(' + ink + ',' + (fade * 0.09).toFixed(4) + ')');
     vg.addColorStop(1, 'rgba(' + ink + ',0)');
     ctx.fillStyle = vg;
     ctx.fillRect(0, m.rowY - vh / 2, W, vh);
@@ -222,7 +220,7 @@ function drawMark(m, now, ink) {
    ===================================================================== */
 
 var bpm = 100;
-var BEATS = 16;            /* four bars of four */
+var BEATS = 16;
 var snapOn = true;
 var layers = [];
 var MAX_LAYERS = 8;
@@ -231,7 +229,7 @@ var playing = false;
 var cycleStart = 0;
 var cycleTimer = null;
 
-var recState = 'off';      /* off | armed | recording */
+var recState = 'off';
 var recNotes = [];
 
 function beatDur() { return 60 / bpm; }
@@ -342,7 +340,6 @@ function frame() {
     ctx.stroke();
   }
 
-  /* playhead + bar ticks */
   if (playing && ac) {
     var p = (ac.currentTime - cycleStart) / cycleDur();
     if (p < 0) p = 0; if (p > 1) p = 1;
@@ -421,8 +418,6 @@ document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 document.addEventListener('visibilitychange', function () {
   if (!ac) return;
   if (document.hidden) {
-    /* setTimeout keeps ticking while the audio clock is frozen, so a
-       suspended loop comes back badly out of phase — stop it instead */
     if (playing) stopTransport();
     ac.suspend();
   } else {
