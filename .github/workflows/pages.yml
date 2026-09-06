@@ -4,7 +4,7 @@ on:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
@@ -18,8 +18,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Build og.jpg
-        run: base64 -d og.jpg.b64 > og.jpg
+        with:
+          persist-credentials: true
+      - name: Materialize og.jpg
+        run: |
+          set -e
+          base64 -d og.jpg.b64 > og.jpg
+          if ! git ls-files --error-unmatch og.jpg >/dev/null 2>&1; then
+            git config user.name "n33d"
+            git config user.email "88423458+gundaIf@users.noreply.github.com"
+            git add og.jpg
+            git commit -m "add og.jpg social card"
+            git push
+          fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
