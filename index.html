@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>playground</title>
+<meta name="description" content="a small music surface">
+<link rel="canonical" href="https://playground.deeeen.xyz/">
+<style>
+  :root {
+    --bg: #0b0e13;
+    --ink: 232, 226, 214;
+    --mono: ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg: #f2efe8; --ink: 28, 31, 38; }
+  }
+  html[data-theme="dark"]  { --bg: #0b0e13; --ink: 232, 226, 214; }
+  html[data-theme="light"] { --bg: #f2efe8; --ink: 28, 31, 38; }
+
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    overscroll-behavior: none;
+    font-family: var(--mono);
+  }
+
+  #c {
+    position: fixed; inset: 0;
+    display: block; width: 100%; height: 100%;
+    touch-action: none;
+    cursor: crosshair;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  #ui {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    padding: 8px 18px calc(10px + env(safe-area-inset-bottom, 0px)) 18px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(var(--ink), 0.42);
+    opacity: 1;
+    transition: opacity 700ms ease;
+    pointer-events: none;
+  }
+  #ui.dim { opacity: 0.12; }
+  #ui > * { pointer-events: auto; }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    min-width: 0;
+  }
+  .row::-webkit-scrollbar { display: none; }
+  .spacer { flex: 1 1 auto; min-width: 8px; }
+
+  button, #home {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 5px 0;
+    margin: 0;
+    font: inherit;
+    color: rgba(var(--ink), 0.42);
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    transition: color 200ms ease, border-color 200ms ease;
+    flex: none;
+  }
+  #home {
+    padding: 5px 14px 5px 0;
+    border-bottom: 0;
+    border-right: 1px solid rgba(var(--ink), 0.18);
+    text-decoration: none;
+  }
+  button:hover, #home:hover { color: rgba(var(--ink), 0.85); }
+  button:focus-visible, #home:focus-visible {
+    outline: 1px solid rgba(var(--ink), 0.6); outline-offset: 3px;
+  }
+  button[aria-pressed="true"], button.on {
+    color: rgba(var(--ink), 0.95);
+    border-bottom-color: rgba(var(--ink), 0.55);
+  }
+  button[disabled] { opacity: 0.26; cursor: default; }
+  button[disabled]:hover { color: rgba(var(--ink), 0.42); }
+
+  .chip {
+    border: 1px solid rgba(var(--ink), 0.28);
+    border-radius: 2px;
+    padding: 3px 7px;
+    border-bottom-width: 1px;
+  }
+  .chip[aria-pressed="true"] {
+    border-color: rgba(var(--ink), 0.7);
+    border-bottom-color: rgba(var(--ink), 0.7);
+  }
+  .chip.muted { opacity: 0.3; text-decoration: line-through; }
+
+  #dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--ink), 0.55);
+    margin-right: 7px;
+    vertical-align: middle;
+  }
+  #rec.armed #dot { border-color: rgba(var(--ink), 0.95); }
+  #rec.on #dot { background: rgba(var(--ink), 0.95); border-color: rgba(var(--ink), 0.95); }
+  #bpmval { min-width: 26px; text-align: center; display: inline-block; }
+  .lbl { opacity: 0.55; flex: none; }
+
+  @media (max-width: 640px) {
+    #ui { font-size: 10px; padding-left: 12px; padding-right: 12px; }
+    .row { gap: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #ui { transition: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <div class="row" id="row1">
+    <a id="home" href="https://deeeen.xyz">home</a>
+    <div class="row" id="insts"></div>
+  </div>
+  <div class="row" id="row2">
+    <button id="rec"><span id="dot"></span><span id="reclabel">record</span></button>
+    <button id="play">play</button>
+    <span class="lbl"><button id="bpmdown">&#8722;</button><span id="bpmval">100</span><button id="bpmup">+</button></span>
+    <button id="snap" aria-pressed="true">snap</button>
+    <div class="row" id="layers"></div>
+    <span class="spacer"></span>
+    <button id="undo" disabled>undo</button>
+    <button id="save" disabled>save</button>
+    <button id="clear" disabled>clear</button>
+    <button id="theme">light</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
