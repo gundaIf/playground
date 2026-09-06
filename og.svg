@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="A hand-drawn music note on paper">
+  <rect width="1200" height="630" fill="#f2efe8"/>
+  <g fill="none" stroke="#1c1f26" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="548" cy="368" rx="54" ry="38" stroke-width="7" transform="rotate(-18 548 368)"/>
+    <path d="M598 356 V168" stroke-width="6.5"/>
+    <path d="M598 168 C638 176 678 198 692 228 C678 214 648 196 598 208" stroke-width="6"/>
+  </g>
+</svg>
