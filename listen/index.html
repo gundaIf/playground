@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>listen · playground</title>
+<meta name="description" content="A quiet Japanese-synth bed that follows the Kochi sky.">
+<meta name="theme-color" content="#0b0e13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
+<link rel="icon" href="https://cdn.blot.im/blog_e9e46454a86f4b50aded8710a3e59817/_avatars/c5a1db36-3051-4d3e-b5da-bb6bf31b219d.jpg" type="image/jpeg">
+<link rel="stylesheet" href="../hub.css">
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<main class="lobby">
+  <p class="kicker"><a href="/">playground</a></p>
+  <h1>listen</h1>
+  <p class="lede" id="blurb">The sky score. Off until you ask.</p>
+  <p class="lede" id="sky-word">—</p>
+</main>
+<div class="bar">
+  <a href="/">playground</a>
+  <button type="button" id="sky-score"><span class="dot"></span><span id="score-label">sound</span></button>
+  <span class="spacer"></span>
+  <button type="button" id="theme">theme</button>
+</div>
+<script src="../sky.js"></script>
+<script src="../lobby.js"></script>
+<script src="listen.js"></script>
+</body>
+</html>
