@@ -1,18 +1,28 @@
 # playground
 
-A blank field for drawing sound. Click or type to play. Layer a loop. Take the wav with you.
+A few rooms. Pick one.
 
 Live at [playground.deeeen.xyz](https://playground.deeeen.xyz/).
 
-## What it does
+## Rooms
 
-The whole page is one canvas. Click, drag, or press a letter key and a note sounds — pitch follows the vertical position, so the surface reads like a score you draw on rather than a keyboard.
+| Path | What it is |
+| --- | --- |
+| `/` | Lobby. Add a new room by adding a line here. |
+| `/rain/` | Stand in the Kochi weather. Pointer parts the rain. |
+| `/marks/` | Leave a fading ink trace. |
+| `/field/` | Draw sound. Click or type. Layer a loop. Take the wav. |
+| `/listen/` | Quiet Japanese-synth bed that follows the sky. |
 
-Ten instruments, all synthesised in the browser with the Web Audio API — glass, kalimba, koto, rhodes, bells, analog, pad, acid, pulse, beats. No samples, no audio files.
+The old full-page instrument now lives at `/field/`. Its engine is still `audio.js`, `play.js`, `ui.js` at the repo root.
 
-Arm `record`, play a phrase, and it commits as a loop layer. Up to eight layers, each one mutable independently, with snap-to-grid and an adjustable BPM. `save` encodes the mixdown to a WAV and downloads it.
+## Adding a room later
 
-## Keys
+1. Make a folder with an `index.html`.
+2. Link it from the list in the root `index.html`.
+3. Reuse `hub.css` and `sky.js` if it should follow theme and weather.
+
+## Field keys
 
 | Key | Action |
 | --- | --- |
@@ -24,9 +34,5 @@ Arm `record`, play a phrase, and it commits as a loop layer. Up to eight layers,
 | `'` | Toggle snap |
 | `-` / `=` | BPM down / up |
 | `\` | Light / dark |
-
-## Run it
-
-Static files, no build step. Open `index.html` from any local server (audio needs a real origin, not `file://`) — `python3 -m http.server` is enough.
 
 More at [deeeen.xyz](https://deeeen.xyz/)
