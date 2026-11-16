@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <title>playground</title>
-<meta name="description" content="A few rooms. Pick one. Draw sound, stand in the weather, leave a mark, sit with the sky.">
+<meta name="description" content="Six small rooms. Play a field of sound, pluck strings tuned to the Kochi sky, pour sand, release ink, type letters into a heap, watch fireflies learn to blink together.">
 <meta name="theme-color" content="#0b0e13" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
 <link rel="canonical" href="https://playground.deeeen.xyz/">
@@ -15,51 +15,67 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="～への入り口 ✴︎ Deen David">
 <meta property="og:title" content="playground">
-<meta property="og:description" content="A few rooms. Pick one. Draw sound, stand in the weather, leave a mark, sit with the sky.">
+<meta property="og:description" content="Six small rooms that follow the Kochi sky. Pick one.">
 <meta property="og:url" content="https://playground.deeeen.xyz/">
 <meta property="og:image" content="https://playground.deeeen.xyz/og.jpg">
 <link rel="stylesheet" href="hub.css">
 </head>
-<body>
+<body class="has-lobby">
 <header class="site-header">
-    <h1 class="site-title"><a href="https://deeeen.xyz/">～への入り口 ✴︎ Deen David</a></h1>
-    <div class="site-header-actions">
-      <a class="home-btn" href="https://deeeen.xyz/" aria-label="Home, deeeen.xyz" title="Home">
-        <svg viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M2.2 8.1 L8 2.8 L13.8 8.1"/>
-          <path d="M4 7.4 V13.2 H12 V7.4"/>
-        </svg>
-      </a>
-      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-        <span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
-      </button>
-    </div>
-  </header>
+  <h1 class="site-title"><a href="https://deeeen.xyz/">～への入り口 ✴︎ Deen David</a></h1>
+  <div class="site-header-actions">
+    <a class="home-btn" href="https://deeeen.xyz/" aria-label="Home, deeeen.xyz" title="Home">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.2 8.1 L8 2.8 L13.8 8.1"/><path d="M4 7.4 V13.2 H12 V7.4"/></svg>
+    </a>
+    <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+      <span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+    </button>
+  </div>
+</header>
 <canvas id="c" aria-hidden="true"></canvas>
-<main class="lobby">
+<main class="lobby2">
   <h1>playground</h1>
   <p class="lede">A few rooms. Pick one.</p>
-  <ul class="rooms">
-    <li><a href="/rain/"><span class="name">rain</span><span class="why">stand in the weather</span></a></li>
-    <li><a href="/marks/"><span class="name">marks</span><span class="why">leave a trace</span></a></li>
-    <li><a href="/field/"><span class="name">field</span><span class="why">draw sound</span></a></li>
-    <li><a href="/listen/"><span class="name">listen</span><span class="why">sit with the sky</span></a></li>
-  </ul>
-  <p class="foot" id="skyline">Kochi · <span id="sky-word">—</span></p>
+  <nav class="nodes" aria-label="rooms">
+    <a class="node" href="/field/" style="--x:20;--y:30">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="4"/><circle cx="24" cy="24" r="11"/><circle cx="24" cy="24" r="19" stroke-dasharray="2 4"/></svg>
+      <span class="name">field</span><span class="why">draw sound</span>
+    </a>
+    <a class="node" href="/strings/" style="--x:52;--y:22">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 12H44"/><path d="M4 21 Q 24 31 44 21"/><path d="M4 30H44"/><path d="M4 39H44"/></svg>
+      <span class="name">strings</span><span class="why">pluck the sky</span>
+    </a>
+    <a class="node" href="/sand/" style="--x:79;--y:40">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="12" r="2.2"/><circle cx="18" cy="22" r="2.2"/><circle cx="30" cy="22" r="2.2"/><circle cx="12" cy="33" r="2.2"/><circle cx="24" cy="33" r="2.2"/><circle cx="36" cy="33" r="2.2"/><path d="M4 43H44"/></svg>
+      <span class="name">sand</span><span class="why">pour, dam, flood</span>
+    </a>
+    <a class="node" href="/flow/" style="--x:42;--y:55">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 14 C 18 4, 30 24, 44 12"/><path d="M4 26 C 18 16, 30 36, 44 24"/><path d="M4 38 C 18 28, 30 48, 44 36"/></svg>
+      <span class="name">flow</span><span class="why">ink on invisible wind</span>
+    </a>
+    <a class="node" href="/type/" style="--x:14;--y:72">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><text x="9" y="22" font-size="17" transform="rotate(-12 9 22)">a</text><text x="24" y="19" font-size="17" transform="rotate(8 24 19)">k</text><text x="17" y="40" font-size="17" transform="rotate(-4 17 40)">o</text><text x="32" y="40" font-size="17" transform="rotate(14 32 40)">i</text></svg>
+      <span class="name">type</span><span class="why">words fall apart</span>
+    </a>
+    <a class="node" href="/dusk/" style="--x:70;--y:74">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="12" cy="14" r="1.6"/><circle cx="33" cy="9" r="1.6"/><circle cx="24" cy="26" r="3.4"/><circle cx="24" cy="26" r="9" stroke-dasharray="1.5 3.5"/><circle cx="9" cy="37" r="1.6"/><circle cx="39" cy="35" r="1.6"/></svg>
+      <span class="name">dusk</span><span class="why">fireflies learn to blink</span>
+    </a>
+  </nav>
 </main>
+<div class="bar">
+  <span>Kochi · <span id="sky-word">—</span></span>
+  <span class="spacer"></span>
+  <button type="button" id="sky-score"><span class="dot"></span><span id="score-label">sound</span></button>
+  <button type="button" id="theme">theme</button>
+</div>
+<script src="sky.js"></script>
 <script>
 (function(){
-  var btn=document.getElementById('theme-toggle');
-  if(!btn) return;
-  btn.addEventListener('click',function(){
-    var cur=document.documentElement.getAttribute('data-theme');
-    var next=cur==='dark'?'light':'dark';
-    document.documentElement.setAttribute('data-theme',next);
-    try{localStorage.setItem('theme',next);}catch(e){}
-  });
+  var b=document.getElementById('theme-toggle'); if(b) b.addEventListener('click',Sky.toggleTheme);
 })();
 </script>
-<script src="sky.js"></script>
+<script src="score.js"></script>
 <script src="lobby.js"></script>
 </body>
 </html>
