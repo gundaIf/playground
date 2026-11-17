@@ -10,8 +10,8 @@ Live at [playground.deeeen.xyz](https://playground.deeeen.xyz/).
 | --- | --- |
 | `/` | Lobby. Rooms are glyphs in a constellation that leans away from your cursor. Sound toggle plays the sky score. |
 | `/field/` | Draw sound. Click or type. Layer a loop. Take the wav. |
-| `/strings/` | Nine wave-equation strings. Drag across them, or play `a s d f g h j k l`. Tuned to the Kochi sky. |
-| `/sand/` | Falling sand, water, stone. Grey sky over Kochi means it rains in here too. Save a PNG. |
+| `/strings/` | Nine wave-equation strings. Drag across them, or play `a s d f g h j k l`. Tuned to the Bangalore sky. |
+| `/sand/` | Falling sand, water, stone. Grey sky over Bangalore means it rains in here too. Save a PNG. |
 | `/flow/` | Hold to release ink into an invisible wind. Space re-rolls the wind. Save the print. |
 | `/type/` | Write across the top, watch the words fall into a heap, sweep your hand through it. Works with any script. |
 | `/dusk/` | Fireflies that drift together and slowly blink in sync. Thunder resets them. |
