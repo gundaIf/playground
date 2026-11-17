@@ -1,4 +1,4 @@
-/* Shared Kochi sky. Sets data-season and data-theme, fires weatherchange. */
+/* Shared Bangalore sky. Sets data-season and data-theme, fires weatherchange. */
 (function (global) {
   var root = document.documentElement;
   var KEY_THEME = 'playground-theme';
@@ -45,7 +45,7 @@
       applySeason('clear', false);
     }
 
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=9.9312&longitude=76.2673&current=weather_code&timezone=Asia%2FKolkata')
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=12.9716&longitude=77.5946&current=weather_code&timezone=Asia%2FKolkata')
       .then(function (r) { return r.json(); })
       .then(function (d) {
         var code = d && d.current && d.current.weather_code;
