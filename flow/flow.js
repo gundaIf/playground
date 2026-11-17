@@ -1,31 +1,53 @@
 /* flow: ink that follows a wind you can't see. Hold to release it. Space re-rolls the wind. */
 (function () {
+  /* The visible canvas is transparent and strokes go straight onto it. `plate` is a second copy
+     used only to survive resizes, recolour old ink when the theme flips, and make the PNG. */
   var plate = document.createElement('canvas'), pctx = plate.getContext('2d');
-  var tint = document.createElement('canvas'), tctx = tint.getContext('2d');
   var parts = [], down = false, pos = { x: 0, y: 0 }, seed = Math.random() * 1000, t = 0;
-  var touched = false;
+  var touched = false, lastInk = '';
 
   var R = Room.mount({
-    name: 'flow', hint: 'hold to release ink · space new wind',
+    name: 'flow', hint: 'hold to release ink · space new wind', touchHint: 'press and drag to release ink',
     actions: [
       { id: 'wind', label: 'new wind', fn: function () { seed = Math.random() * 1000; } },
-      { id: 'clear', label: 'clear', fn: function () { pctx.clearRect(0, 0, plate.width, plate.height); parts = []; } },
-      { id: 'save', label: 'save print', fn: function () { Room.savePNG(R.canvas, 'flow'); } }
+      { id: 'clear', label: 'clear', fn: function () { pctx.clearRect(0, 0, plate.width, plate.height); R.ctx.clearRect(0, 0, S.w, S.h); parts = []; } },
+      { id: 'save', label: 'save', title: 'save print', fn: savePrint }
     ]
   });
   var ctx = R.ctx, S = R.stage;
 
+  function repaint() { ctx.clearRect(0, 0, S.w, S.h); ctx.drawImage(plate, 0, 0, S.w, S.h); }
+
   function resize() {
     var old = null;
     if (plate.width) { old = document.createElement('canvas'); old.width = plate.width; old.height = plate.height; old.getContext('2d').drawImage(plate, 0, 0); }
-    plate.width = tint.width = R.canvas.width;
-    plate.height = tint.height = R.canvas.height;
+    plate.width = R.canvas.width; plate.height = R.canvas.height;
     pctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
-    tctx.setTransform(1, 0, 0, 1, 0, 0);
     if (old) pctx.drawImage(old, 0, 0, S.w, S.h);
+    repaint();
   }
   Room.onResize(resize);
   resize();
+
+  function recolor(ink) {
+    pctx.save();
+    pctx.setTransform(1, 0, 0, 1, 0, 0);
+    pctx.globalCompositeOperation = 'source-in';
+    pctx.fillStyle = Room.rgb(ink);
+    pctx.fillRect(0, 0, plate.width, plate.height);
+    pctx.restore();
+    repaint();
+  }
+
+  function savePrint() {
+    var out = document.createElement('canvas');
+    out.width = plate.width; out.height = plate.height;
+    var o = out.getContext('2d');
+    o.fillStyle = Room.rgb(Room.bgRGB());
+    o.fillRect(0, 0, out.width, out.height);
+    o.drawImage(plate, 0, 0);
+    Room.savePNG(out, 'flow');
+  }
 
   /* small value noise */
   function hash(x, y) {
@@ -58,7 +80,7 @@
   }
 
   Room.pointer(R.canvas, {
-    down: function (x, y) { down = true; touched = true; pos = { x: x, y: y }; emit(x, y, 30); R.hint('hold to release ink · space new wind'); },
+    down: function (x, y) { down = true; touched = true; pos = { x: x, y: y }; emit(x, y, 30); },
     move: function (x, y, isDown) { pos = { x: x, y: y }; },
     up: function () { down = false; }
   });
@@ -74,31 +96,23 @@
   Room.loop(function (dt) {
     t += dt * 60;
     if (down) emit(pos.x, pos.y, 10);
-    var ink = Room.inkRGB();
-    pctx.lineCap = 'round';
+    var ink = Room.inkRGB(), inkKey = ink.join(',');
+    if (lastInk && inkKey !== lastInk) recolor(ink);
+    lastInk = inkKey;
+    ctx.lineCap = pctx.lineCap = 'round';
     var storm = Sky.storm() ? 1.6 : 1;
     for (var i = parts.length - 1; i >= 0; i--) {
       var p = parts[i];
       var a = angle(p.x, p.y);
       var nx = p.x + Math.cos(a) * p.sp * 2.2 * storm, ny = p.y + Math.sin(a) * p.sp * 2.2 * storm;
       var fade = Math.min(1, p.life / 60);
-      pctx.strokeStyle = 'rgba(0,0,0,' + (0.16 * fade).toFixed(3) + ')';
-      pctx.lineWidth = p.w;
+      var style = Room.rgb(ink, (0.16 * fade).toFixed(3));
+      ctx.strokeStyle = pctx.strokeStyle = style;
+      ctx.lineWidth = pctx.lineWidth = p.w;
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.stroke();
       pctx.beginPath(); pctx.moveTo(p.x, p.y); pctx.lineTo(nx, ny); pctx.stroke();
       p.x = nx; p.y = ny; p.life--;
       if (p.life <= 0 || nx < -20 || ny < -20 || nx > S.w + 20 || ny > S.h + 20) parts.splice(i, 1);
     }
-
-    /* tint the black plate with the current ink so theme changes recolour old prints too */
-    tctx.globalCompositeOperation = 'source-over';
-    tctx.clearRect(0, 0, tint.width, tint.height);
-    tctx.drawImage(plate, 0, 0);
-    tctx.globalCompositeOperation = 'source-in';
-    tctx.fillStyle = Room.rgb(ink);
-    tctx.fillRect(0, 0, tint.width, tint.height);
-
-    ctx.fillStyle = Room.rgb(Room.bgRGB());
-    ctx.fillRect(0, 0, S.w, S.h);
-    ctx.drawImage(tint, 0, 0, S.w, S.h);
   });
 })();

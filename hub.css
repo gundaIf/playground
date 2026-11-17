@@ -83,7 +83,7 @@ canvas.touch { position: fixed; inset: 0; width: 100%; height: 100%; display: bl
 html[data-theme="dark"] .theme-toggle-thumb{left:calc(100% - .625em);background:rgba(var(--ink),.9)}
 
 /* ---- lobby: constellation ---- */
-.lobby2{position:relative;z-index:1;min-height:calc(100vh - 44px);padding:9vh 28px 4rem}
+.lobby2{position:relative;z-index:1;min-height:calc(100vh - 44px);min-height:calc(100dvh - 44px);padding:9vh 28px 4rem}
 .lobby2 h1{margin:0 0 .6em}
 .lobby2 .lede{margin:0}
 .nodes{position:absolute;inset:0;pointer-events:none}
@@ -100,4 +100,34 @@ html[data-theme="dark"] .theme-toggle-thumb{left:calc(100% - .625em);background:
   .lobby2{padding-top:11vh}
   .nodes{position:static;display:grid;grid-template-columns:1fr 1fr;gap:2.4rem 1rem;margin-top:3rem;pointer-events:auto}
   .node{position:static;margin:0;width:auto}
+}
+
+/* ---- touch + mobile polish ---- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+canvas.touch{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body.room{position:fixed;inset:0;overflow:hidden;overscroll-behavior:none}
+body.room .bar{background:var(--bg);border-top:1px solid rgba(var(--ink),.08)}
+.bar .back-glyph{display:none}
+.hint-float{display:none;position:fixed;left:0;right:0;z-index:2;text-align:center;font-size:12px;letter-spacing:.04em;color:rgba(var(--ink),.55);pointer-events:none;transition:opacity 1.2s ease;bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+.hint-float.gone{opacity:0}
+.node:active svg{transform:scale(.92)}
+@media (max-width:720px){
+  .site-header{padding:calc(14px + env(safe-area-inset-top,0px)) 18px 0}
+  .site-title{font-size:11px}
+  .bar{gap:0;letter-spacing:.02em;padding:0 12px calc(2px + env(safe-area-inset-bottom,0px));min-height:48px;font-size:12px;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none}
+  .bar::-webkit-scrollbar{display:none}
+  .bar>*{flex:none}
+  .bar .spacer{flex:1 0 4px}
+  .bar a,.bar button{padding:14px 6px}
+  .bar #hint{display:none}
+  .bar .back-text{display:none}
+  .bar .back-glyph{display:inline;font-size:24px;line-height:1;padding:0 6px 3px 0}
+  .hint-float{display:block}
+  .lobby2{min-height:0;padding:11vh 22px 6rem}
+  .nodes{gap:1.9rem .5rem;margin-top:2.2rem}
+  .node{gap:.4em}
+  .node svg{width:50px;height:50px}
+  .node .name{font-size:14px}
+  .node .why{font-size:12px;line-height:1.35}
 }

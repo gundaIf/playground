@@ -15,7 +15,7 @@
   var tick = 0;
 
   var R = Room.mount({
-    name: 'sand', hint: '1 sand · 2 water · 3 stone · 4 erase',
+    name: 'sand', hint: '1 sand · 2 water · 3 stone · 4 erase', touchHint: 'pick a material, then draw',
     actions: MATS.map(function (m) {
       return { id: 'm-' + m.id, label: m.id, fn: function () { setMat(m); } };
     }).concat([
@@ -52,7 +52,7 @@
   sync();
 
   function paint(cx, cy) {
-    var r = cur.n === 3 ? 2 : 3;
+    var r = cur.n === 0 ? 4 : 2;
     for (var dy = -r; dy <= r; dy++) {
       for (var dx = -r; dx <= r; dx++) {
         if (dx * dx + dy * dy > r * r + 1) continue;
@@ -124,7 +124,7 @@
         if (grid[rx] === 0) grid[rx] = 2;
       }
     }
-    step();
+    step(); step(); /* two sim ticks a frame so grains fall at a believable speed */
 
     var bg = Room.bgRGB(), ink = Room.inkRGB();
     function pack(c) { return (255 << 24) | ((c[2] | 0) << 16) | ((c[1] | 0) << 8) | (c[0] | 0); }

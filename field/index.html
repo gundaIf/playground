@@ -36,6 +36,15 @@
   #rec.on #dot { background: rgba(var(--ink), 0.95); border-color: rgba(var(--ink), 0.95); }
   #bpmval { min-width: 26px; text-align: center; display: inline-block; }
   .lbl { opacity: 0.55; flex: none; }
+  button, #home { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  @media (max-width: 640px) {
+    #ui { font-size: 12px; padding-left: 14px; padding-right: 14px; gap: 2px; }
+    button, #home { padding: 10px 0; }
+    #home { padding-right: 12px; }
+    .chip { padding: 7px 10px; }
+    .row { gap: 18px; }
+    #insts { gap: 18px; }
+  }
 </style>
 </head>
 <body>

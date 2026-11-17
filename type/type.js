@@ -1,11 +1,12 @@
 /* type: letters fall like sand. Write across the top, watch the words collapse, sweep through the heap. */
 (function () {
-  var CS = 22;
+  var CS = window.innerWidth < 500 ? 20 : 22;
+  var coarse = window.matchMedia('(pointer: coarse)').matches;
   var WIN = 14, lo = 0, cols = 0, rows = 0, grid = [], fall = [], caret = 0, hasTyped = false, flush = 0;
   var pointer = { x: -999, y: -999, px: -999, py: -999 };
 
   var R = Room.mount({
-    name: 'type', hint: 'type. sweep your hand through the pile',
+    name: 'type', hint: 'type. sweep your hand through the pile', touchHint: 'type, then swipe through the pile',
     actions: [
       { id: 'clear', label: 'clear', fn: function () { grid = new Array(cols * rows); fall = []; } },
       { id: 'save', label: 'save', fn: function () { Room.savePNG(R.canvas, 'type'); } }
@@ -22,7 +23,10 @@
   ta.focus();
 
   function resize() {
-    var nc = Math.floor(S.w / CS), nr = Math.floor(S.playH / CS);
+    /* when a phone keyboard opens, the visible area shrinks: keep the heap above it */
+    var vv = window.visualViewport, vis = vv ? vv.height : S.h;
+    var floor = Math.min(S.playH, vis - S.barH);
+    var nc = Math.floor(S.w / CS), nr = Math.max(6, Math.floor(floor / CS));
     var ng = new Array(nc * nr);
     for (var y = 0; y < Math.min(rows, nr); y++) {
       for (var x = 0; x < Math.min(cols, nc); x++) ng[(nr - 1 - y) * nc + x] = grid[(rows - 1 - y) * cols + x];
@@ -37,6 +41,7 @@
   }
   Room.onResize(resize);
   resize();
+  if (window.visualViewport) visualViewport.addEventListener('resize', resize);
 
   function spawn(ch) {
     if (ch === '\n') { caret = lo; return; }
@@ -57,6 +62,7 @@
   });
   window.addEventListener('keydown', function () { if (document.activeElement !== ta) ta.focus(); });
 
+  R.canvas.addEventListener('click', function () { ta.focus(); });
   Room.pointer(R.canvas, {
     down: function (x) { setWindow(Math.floor(x / CS) - (WIN >> 1)); ta.focus(); },
     move: function (x, y) { pointer.x = x; pointer.y = y; },
@@ -156,7 +162,7 @@
     ctx.fillRect(lo * CS, 0, WIN * CS, 1);
     if (!hasTyped) {
       ctx.fillStyle = Room.rgb(ink, 0.32);
-      ctx.fillText('write something', S.w / 2, S.playH * 0.42);
+      ctx.fillText(coarse ? 'tap, then write' : 'write something', S.w / 2, Math.min(S.playH, (window.visualViewport ? visualViewport.height : S.h) - S.barH) * 0.42);
     }
   });
 })();

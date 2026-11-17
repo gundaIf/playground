@@ -1,6 +1,6 @@
 /* strings: nine wave-equation strings. Drag across to pluck. Tuned by the Kochi sky. */
 (function () {
-  var R = Room.mount({ name: 'strings', hint: 'click once to wake the sound' });
+  var R = Room.mount({ name: 'strings', hint: 'click once to wake the sound', touchHint: 'touch once to wake the sound' });
   var ctx = R.ctx, S = R.stage;
 
   var N = 9, M = 140;
@@ -45,7 +45,7 @@
     var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1700;
     send = ac.createGain(); send.gain.value = 0.32;
     send.connect(d); d.connect(lp); lp.connect(fb); fb.connect(d); lp.connect(master);
-    R.hint('move across the strings. or press a s d f g h j k l');
+    R.hint(Room.coarse ? 'drag across the strings' : 'move across the strings. or press a s d f g h j k l');
   }
 
   var noiseB = null;

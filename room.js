@@ -27,7 +27,9 @@
     stage.dpr = Math.min(global.devicePixelRatio || 1, 2);
     stage.w = c.clientWidth;
     stage.h = c.clientHeight;
-    stage.playH = Math.max(120, stage.h - 44);
+    var bh = stage.bar ? stage.bar.offsetHeight : 44;
+    stage.barH = bh;
+    stage.playH = Math.max(120, stage.h - bh);
     c.width = Math.round(stage.w * stage.dpr);
     c.height = Math.round(stage.h * stage.dpr);
     stage.ctx.setTransform(stage.dpr, 0, 0, stage.dpr, 0, 0);
@@ -54,10 +56,13 @@
     /* o: { name, hint, actions: [{ id, label, title, fn(btn) }] } */
     mount: function (o) {
       document.title = o.name + ' · playground';
+      var coarse = global.matchMedia('(pointer: coarse)').matches;
+      if (coarse && o.touchHint) o.hint = o.touchHint;
+      Room.coarse = coarse;
 
       var header = h(
         '<header class="site-header">' +
-        '<h1 class="site-title"><a href="' + HOME + '">～への入り口 ✴︎ Deen David</a></h1>' +
+        '<h1 class="site-title"><a href="' + HOME + '">Deen’s Digital Plot ✿</a></h1>' +
         '<div class="site-header-actions">' +
         '<a class="home-btn" href="' + HOME + '" aria-label="Home, deeeen.xyz" title="Home">' +
         '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.2 8.1 L8 2.8 L13.8 8.1"/><path d="M4 7.4 V13.2 H12 V7.4"/></svg></a>' +
@@ -72,10 +77,20 @@
       stage.canvas = canvas;
       stage.ctx = canvas.getContext('2d');
 
-      var bar = h('<div class="bar"><a href="/">playground</a><span id="hint"></span><span class="spacer"></span></div>');
+      document.body.classList.add('room');
+      var bar = h('<div class="bar"><a class="back" href="/" aria-label="playground, all rooms"><span class="back-glyph" aria-hidden="true">\u2039</span><span class="back-text">playground</span></a><span id="hint"></span><span class="spacer"></span></div>');
       document.body.appendChild(bar);
+      stage.bar = bar;
       var hint = bar.querySelector('#hint');
-      hint.textContent = o.hint || '';
+      /* on phones the bar has no room for a sentence, so the hint floats above it and fades on first touch */
+      var float = h('<div class="hint-float" aria-hidden="true"></div>');
+      document.body.appendChild(float);
+      function setHint(t) { hint.textContent = t || ''; float.textContent = t || ''; float.classList.remove('gone'); }
+      setHint(o.hint);
+      var fade = setTimeout(function () { float.classList.add('gone'); }, 7000);
+      function hideHint() { clearTimeout(fade); float.classList.add('gone'); }
+      document.addEventListener('pointerdown', hideHint, { once: true });
+      document.addEventListener('keydown', hideHint, { once: true });
 
       var btns = {};
       (o.actions || []).forEach(function (a) {
@@ -94,7 +109,7 @@
 
       return {
         canvas: canvas, ctx: stage.ctx, stage: stage, btns: btns,
-        hint: function (t) { hint.textContent = t; }
+        hint: function (t) { setHint(t); clearTimeout(fade); fade = setTimeout(function () { float.classList.add('gone'); }, 5000); }
       };
     },
 

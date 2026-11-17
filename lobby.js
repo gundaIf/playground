@@ -38,6 +38,8 @@
   window.addEventListener('weatherchange', seed);
   window.addEventListener('pointermove', function (e) { ptr.x = e.clientX; ptr.y = e.clientY; });
   document.addEventListener('pointerleave', function () { ptr.x = ptr.y = -999; });
+  window.addEventListener('pointerup', function (e) { if (e.pointerType !== 'mouse') ptr.x = ptr.y = -999; });
+  window.addEventListener('pointercancel', function () { ptr.x = ptr.y = -999; });
   resize();
 
   function distToSeg(px, py, ax, ay, bx, by) {

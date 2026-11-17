@@ -1,16 +1,27 @@
 /* dusk: fireflies that drift together and slowly learn to blink in time. Thunder resets them. */
 (function () {
-  var N = 150, flies = [], ptr = { x: -999, y: -999, down: false }, shock = 0;
+  var N = window.innerWidth < 600 ? 90 : 150, flies = [], ptr = { x: -999, y: -999, down: false }, shock = 0;
   var sync = 0;
 
   var R = Room.mount({
-    name: 'dusk', hint: 'move to call them · press to flash',
+    name: 'dusk', hint: 'move to call them · press to flash', touchHint: 'touch to call them · tap to flash',
     actions: [{ id: 'thunder', label: 'thunder', fn: function () { thunder(); } }]
   });
   var ctx = R.ctx, S = R.stage;
   var syncEl = document.createElement('span');
   syncEl.style.opacity = '0.8';
   R.btns.thunder.parentNode.insertBefore(syncEl, R.btns.thunder);
+
+  /* one soft glow sprite, re-tinted when the ink colour changes, instead of a gradient per firefly */
+  var glow = document.createElement('canvas'); glow.width = glow.height = 64;
+  var glowInk = '';
+  function makeGlow(ink) {
+    var g = glow.getContext('2d'), r = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.clearRect(0, 0, 64, 64);
+    r.addColorStop(0, 'rgba(' + ink + ',1)'); r.addColorStop(1, 'rgba(' + ink + ',0)');
+    g.fillStyle = r; g.fillRect(0, 0, 64, 64);
+    glowInk = ink;
+  }
 
   var i, j;
   for (i = 0; i < N; i++) {
@@ -96,6 +107,7 @@
     ctx.fillStyle = Room.rgb(bg, 0.22);
     ctx.fillRect(0, 0, S.w, S.h);
     var inkS = ink.join(',');
+    if (inkS !== glowInk) makeGlow(inkS);
     for (i = 0; i < N; i++) {
       var g = flies[i];
       var b = Math.pow(1 - g.ph, 14);
@@ -103,11 +115,9 @@
       ctx.beginPath(); ctx.arc(g.x, g.y, 1.1, 0, 6.2832); ctx.fill();
       if (b > 0.02) {
         var r = 2 + b * 9;
-        var grad = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, r);
-        grad.addColorStop(0, 'rgba(' + inkS + ',' + (0.75 * b).toFixed(3) + ')');
-        grad.addColorStop(1, 'rgba(' + inkS + ',0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath(); ctx.arc(g.x, g.y, r, 0, 6.2832); ctx.fill();
+        ctx.globalAlpha = 0.8 * b;
+        ctx.drawImage(glow, g.x - r, g.y - r, r * 2, r * 2);
+        ctx.globalAlpha = 1;
       }
     }
     if (shock > 0.01) {
