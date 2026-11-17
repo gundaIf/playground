@@ -1,4 +1,4 @@
-/* strings: nine wave-equation strings. Drag across to pluck. Tuned by the Kochi sky. */
+/* strings: nine wave-equation strings. Drag across to pluck. Tuned by the Bangalore sky. */
 (function () {
   var R = Room.mount({ name: 'strings', hint: 'click once to wake the sound', touchHint: 'touch once to wake the sound' });
   var ctx = R.ctx, S = R.stage;
