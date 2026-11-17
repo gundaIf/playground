@@ -1,4 +1,4 @@
-/* sand: falling sand, water and stone. When Kochi's sky is grey, it rains in here too. */
+/* sand: falling sand, water and stone. When Bangalore's sky is grey, it rains in here too. */
 (function () {
   var MATS = [
     { id: 'sand', n: 1, key: '1' },
